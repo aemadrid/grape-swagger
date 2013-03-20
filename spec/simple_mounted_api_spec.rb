@@ -12,21 +12,21 @@ describe "a simple mounted api" do
       }
 
       get '/simple' do
-        {:bla => 'something'}
+        { :bla => 'something' }
       end
 
       desc 'this gets something else', {
-        :headers => {
-          "XAuthToken" => {description: "A required header.", required: true},
-          "XOtherHeader" => {description: "An optional header.", required: false}
+        :headers    => {
+          "XAuthToken"   => { description: "A required header.", required: true },
+          "XOtherHeader" => { description: "An optional header.", required: false }
         },
-	:http_codes => {
-		403 => "invalid pony",
-		405 => "no ponies left!"
-	}
+        :http_codes => {
+          403 => "invalid pony",
+          405 => "no ponies left!"
+        }
       }
       get '/simple_with_headers' do
-        {:bla => 'something_else'}
+        { :bla => 'something_else' }
       end
     end
 
@@ -36,7 +36,9 @@ describe "a simple mounted api" do
     end
   end
 
-  def app; SimpleApi end
+  def app;
+    SimpleApi
+  end
 
   it "retrieves swagger-documentation on /swagger_doc" do
     get '/swagger_doc'
