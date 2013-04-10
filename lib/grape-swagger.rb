@@ -218,10 +218,10 @@ module Grape
               end
             end
 
-            def strip_heredoc
-              res = scan(/^[ \t]*(?=\S)/).min
-              indent = res ? res.size : 0
-              gsub(/^[ \t]{#{indent}}/, '')
+            def strip_heredoc(string)
+              scan = string.scan(/^[ \t]*(?=\S)/).min
+              indent = scan ? scan.size : 0
+              string.gsub(/^[ \t]{#{indent}}/, '')
             end
 
           end
