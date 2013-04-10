@@ -1,4 +1,4 @@
-require 'spec_helper'
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "helpers" do
 
@@ -18,30 +18,30 @@ describe "helpers" do
   context "parsing parameters" do
     it "should parse params as query strings for a GET" do
       params = {
-        name: {type: 'String', :desc => "A name", required: true },
+        name:  { type: 'String', :desc => "A name", required: true },
         level: 'max'
       }
-      path = "/coolness"
+      path   = "/coolness"
       method = "GET"
       @api.parse_params(params, path, method).should ==
         [
-          {paramType: "query", name: :name, description:"A name", dataType: "String", required: true},
-          {paramType: "query", name: :level, description:"", dataType: "String", required: false}
-      ]
+          { paramType: "query", name: :name, description: "A name", dataType: "String", required: true },
+          { paramType: "query", name: :level, description: "", dataType: "String", required: false }
+        ]
     end
 
     it "should parse params as body for a POST" do
       params = {
-        name: {type: 'String', :desc =>"A name", required: true },
+        name:  { type: 'String', :desc => "A name", required: true },
         level: 'max'
       }
-      path = "/coolness"
+      path   = "/coolness"
       method = "POST"
       @api.parse_params(params, path, method).should ==
         [
-          {paramType: "body", name: :name, description:"A name", dataType: "String", required: true},
-          {paramType: "body", name: :level, description:"", dataType: "String", required: false}
-      ]
+          { paramType: "form", name: :name, description: "A name", dataType: "String", required: true },
+          { paramType: "form", name: :level, description: "", dataType: "String", required: false }
+        ]
     end
   end
 
@@ -77,11 +77,19 @@ describe "helpers" do
 
   context "parsing header parameters" do
     it "should parse params for the header" do
-      params = {"XAuthToken" => { description: "A required header.", required: true}}
+      params = { "XAuthToken" => { description: "A required header.", required: true } }
       @api.parse_header_params(params).should ==
         [
-          {paramType: "header", name: "XAuthToken", description:"A required header.", dataType: "String", required: true}
-      ]
+          { paramType: "header", name: "XAuthToken", description: "A required header.", dataType: "String", required: true }
+        ]
+    end
+  end
+
+  context "parsing object_fields" do
+    it "should parse object_fields" do
+      object_fields = { :id => { :type => 'String', :desc => 'description test' }, :type => 'User', :desc => 'user description', :required => true }
+      @api.parse_object_fields(object_fields).should ==
+        [{ paramType: 'body', name: 'User', dataType: 'User', description: 'user description', required: true }]
     end
   end
 

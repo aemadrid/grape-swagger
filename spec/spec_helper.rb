@@ -1,32 +1,32 @@
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'support'))
+unless Object.const_defined? :SPEC_HELPER_LOADED
 
-require 'grape'
-require 'grape-swagger'
+  $LOAD_PATH.unshift(File.dirname(__FILE__))
+  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'support'))
 
-require 'rubygems'
-require 'bundler'
+  require 'grape'
+  require 'grape-swagger'
 
-require 'pry'
+  require 'rubygems'
+  require 'bundler'
 
-Bundler.setup :default, :test
+  require 'pry'
 
+  Bundler.setup :default, :test
 
-require 'rack/test'
+  require 'rack/test'
 
-# Load support files
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+  # Load support files
+  Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-RSpec.configure do |config|
-  # Remove this line if you don't want RSpec's should and should_not
-  # methods or matchers
-  require 'rspec/expectations'
-  config.include RSpec::Matchers
+  RSpec.configure do |config|
+    require 'rspec/expectations'
+    config.include RSpec::Matchers
 
-  # == Mock Framework
-  config.mock_with :rspec
+    config.mock_with :rspec
 
-  config.include Rack::Test::Methods
-  #config.include Rack::Test::Methods::Patch
+    config.include Rack::Test::Methods
+  end
+
+  Object.const_set :SPEC_HELPER_LOADED, true
 end

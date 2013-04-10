@@ -1,4 +1,4 @@
-require 'spec_helper'
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "options: " do
   context "overruling the basepath" do
@@ -210,22 +210,22 @@ describe "options: " do
           {:bla => 'something'}
         end
       end
-  
+
       class SimpleApiWithProtection < Grape::API
         mount ProtectedApi
         add_swagger_documentation
       end
     end
-  
+
     def app; SimpleApiWithProtection; end
 
     it "should use https schema in mount point" do
-      get '/swagger_doc', {}, 'rack.url_scheme' => 'https'
-      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"https://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}" 
+      get '/swagger_doc', {}, {'rack.url_scheme' => 'https', 'SERVER_PORT' => 443}
+      last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"https://example.org\", :operations=>[], :apis=>[{:path=>\"/swagger_doc/something.{format}\"}, {:path=>\"/swagger_doc/swagger_doc.{format}\"}]}"
     end
 
     it "should use https schema in endpoint doc" do
-      get '/swagger_doc/something', {}, 'rack.url_scheme' => 'https'
+      get '/swagger_doc/something', {}, {'rack.url_scheme' => 'https', 'SERVER_PORT' => 443}
       last_response.body.should == "{:apiVersion=>\"0.1\", :swaggerVersion=>\"1.1\", :basePath=>\"https://example.org\", :resourcePath=>\"\", :apis=>[{:path=>\"/something.{format}\", :operations=>[{:notes=>nil, :summary=>\"this gets something\", :nickname=>\"GET-something---format-\", :httpMethod=>\"GET\", :parameters=>[]}]}]}"
     end
   end
